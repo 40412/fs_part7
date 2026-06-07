@@ -1,0 +1,15 @@
+{
+  "name": "bloglist-root",
+  "private": true,
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "dev": "concurrently \"npm run dev --prefix bloglist-backend\" \"npm run dev --prefix bloglist-frontend\"",
+    "frontend": "npm run dev --prefix bloglist-frontend",
+    "backend": "npm run dev --prefix bloglist-backend",
+    "build": "npm run build --prefix bloglist-frontend",
+    "prod": "npm run build --prefix bloglist-frontend && npm run start --prefix bloglist-backend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  }
+}
