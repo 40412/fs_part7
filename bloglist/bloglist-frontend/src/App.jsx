@@ -14,6 +14,8 @@ import {
 } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Blog from "./components/BlogDetail";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { NotFound } from "./components/NotFound";
 
 const App = () => {
   const { user, login } = useContext(AuthContext);
@@ -33,38 +35,36 @@ const App = () => {
     setTimeout(() => setNotification(null), 4000);
   };
 
-  /*  if (!user)
-    return (
-      <>
-        <Notification message={notification} />
-        <LoginForm showNotification={showNotification} />;
-      </>
-    ); */
-
   return (
     <Router>
       <Navigation />
       <Notification message={notification} />
-      <Routes>
-        <Route
-          path="/login"
-          element={<LoginForm showNotification={showNotification} />}
-        />
-        <Route
-          path="/"
-          element={<BlockList blogs={blogs} setBlogs={setBlogs} />}
-        />
-        <Route
-          path="/blogs/:id"
-          element={<Blog blogs={blogs} setBlogs={setBlogs} />}
-        />
-        <Route
-          path="/new"
-          element={
-            <BlogForm setblogs={setBlogs} showNotification={showNotification} />
-          }
-        ></Route>
-      </Routes>
+      <ErrorBoundary>
+        <Routes>
+          <Route
+            path="/login"
+            element={<LoginForm showNotification={showNotification} />}
+          />
+          <Route
+            path="/"
+            element={<BlockList blogs={blogs} setBlogs={setBlogs} />}
+          />
+          <Route
+            path="/blogs/:id"
+            element={<Blog blogs={blogs} setBlogs={setBlogs} />}
+          />
+          <Route
+            path="/new"
+            element={
+              <BlogForm
+                setblogs={setBlogs}
+                showNotification={showNotification}
+              />
+            }
+          ></Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </ErrorBoundary>
     </Router>
   );
 };
