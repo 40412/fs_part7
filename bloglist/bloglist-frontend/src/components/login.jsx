@@ -5,12 +5,13 @@ import { useNavigate } from "react-router-dom"
 import { Button } from "@mui/material"
 import useAuthStore from "../stores/authStore"
 import useNotificationStore from "../stores/notificationStore"
+import { useField } from "../hooks/useField"
 
 export const LoginForm = ({ showNotification }) => {
   /* const { login } = useContext(AuthContext); */
   const login = useAuthStore((s) => s.login)
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+  const username = useField("text")
+  const password = useField("text")
   const navigate = useNavigate()
   const notify = useNotificationStore((s) => s.showNotification)
 
@@ -19,8 +20,8 @@ export const LoginForm = ({ showNotification }) => {
 
     try {
       const user = await loginService({
-        username,
-        password,
+        username: username.value,
+        password: password.value,
       })
 
       login(user)
@@ -28,8 +29,8 @@ export const LoginForm = ({ showNotification }) => {
       /* showNotification("Successfully logged in", "success") */
       notify("Successfully logged in", "success")
 
-      setUsername("")
-      setPassword("")
+      //setUsername("")
+      //setPassword("")
       navigate("/")
     } catch (e) {
       console.log(e)
@@ -45,17 +46,17 @@ export const LoginForm = ({ showNotification }) => {
         <div style={{ margin: 10 }}>
           username
           <input
-            type="text"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
+            type={username.type}
+            value={username.value}
+            onChange={username.onChange}
           />
         </div>
         <div style={{ margin: 10 }}>
           password
           <input
-            type="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
+            type={password.type}
+            value={password.value}
+            onChange={password.onChange}
           />
         </div>
         <Button variant="contained" type="submit">

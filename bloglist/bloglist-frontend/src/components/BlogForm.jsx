@@ -3,18 +3,19 @@ import { useNavigate } from "react-router-dom"
 import { Box, Button } from "@mui/material"
 import useNotificationStore from "../stores/notificationStore"
 import useBlogStore from "../stores/blogStore"
+import { useField } from "../hooks/useField"
 
 const BlogForm = ({ setblogs, showNotification, onCreate = () => {} }) => {
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setUrl] = useState("")
+  const title = useField("text")
+  const author = useField("text")
+  const url = useField("text")
   const navigate = useNavigate()
   const notify = useNotificationStore((s) => s.showNotification)
   const createBlog = useBlogStore((state) => state.createBlog)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const newBlog = { title, author, url }
+    const newBlog = { title: title.value, author: author.value, url: url.value }
 
     try {
       onCreate(newBlog)
@@ -34,9 +35,9 @@ const BlogForm = ({ setblogs, showNotification, onCreate = () => {} }) => {
       notify(e.message, "error")
     }
 
-    setTitle("")
+    /* setTitle("")
     setAuthor("")
-    setUrl("")
+    setUrl("") */
   }
 
   return (
@@ -45,17 +46,21 @@ const BlogForm = ({ setblogs, showNotification, onCreate = () => {} }) => {
 
       <Box style={{ margin: 10 }}>
         title:
-        <input value={title} onChange={(e) => setTitle(e.target.value)} />
+        <input
+          type={title.type}
+          value={title.value}
+          onChange={title.onChange}
+        />
       </Box>
 
       <div style={{ margin: 10 }}>
         author:
-        <input value={author} onChange={(e) => setAuthor(e.target.value)} />
+        <input value={author.value} onChange={author.onChange} />
       </div>
 
       <div style={{ margin: 10 }}>
         url:
-        <input value={url} onChange={(e) => setUrl(e.target.value)} />
+        <input value={url.value} onChange={url.onChange} />
       </div>
 
       <Button variant="outlined" style={{ margin: 10 }} type="submit">

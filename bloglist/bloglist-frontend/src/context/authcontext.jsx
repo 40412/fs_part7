@@ -1,6 +1,6 @@
 import { createContext, useState } from "react"
 import { setToken } from "../services/token"
-import { useNavigate } from "react-router-dom"
+import { removeUser, saveUser } from "../services/persistenUser"
 
 export const AuthContext = createContext()
 
@@ -10,13 +10,13 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     setUser(userData)
     setToken(userData.token)
-    window.localStorage.setItem("loggedUser", JSON.stringify(userData))
+    saveUser(userData)
   }
 
   const logout = () => {
     setUser(null)
     setToken(null)
-    window.localStorage.removeItem("loggedUser")
+    removeUser()
   }
 
   return (
