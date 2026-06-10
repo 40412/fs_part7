@@ -1,15 +1,16 @@
-import { useEffect } from "react";
-import { getAll } from "../services/blogs";
-import { Link } from "react-router-dom";
+import { useEffect } from "react"
+import { getAll } from "../services/blogs"
+import { Link } from "react-router-dom"
+import useBlogStore from "../stores/blogStore"
 
-export const BlockList = ({ blogs, setBlogs }) => {
-  useEffect(() => {
+export const BlockList = ({ blogs }) => {
+  /* useEffect(() => {
     const getBlocks = async () => {
       const bloglist = await getAll();
       setBlogs(bloglist);
     };
     getBlocks();
-  }, []);
+  }, []); */
 
   return (
     <div>
@@ -24,5 +25,5 @@ export const BlockList = ({ blogs, setBlogs }) => {
           </div>
         ))}
     </div>
-  );
-};
+  )
+}

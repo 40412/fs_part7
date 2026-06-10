@@ -1,7 +1,7 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { useContext, useState, useEffect } from "react";
-import { AuthContext } from "../context/authcontext";
-import { modify, remove } from "../services/blogs";
+import { useNavigate, useParams } from "react-router-dom"
+import { useContext, useState, useEffect } from "react"
+import { AuthContext } from "../context/authcontext"
+import { modify, remove } from "../services/blogs"
 import {
   Card,
   CardContent,
@@ -9,49 +9,57 @@ import {
   Button,
   Stack,
   Link,
-} from "@mui/material";
+} from "@mui/material"
+import useAuthStore from "../stores/authStore"
+import useNotificationStore from "../stores/notificationStore"
+import useBlogStore from "../stores/blogStore"
 
 const Blog = ({ blogs, setBlogs }) => {
-  const { id } = useParams();
-  const { user } = useContext(AuthContext);
-  const [likes, setLikes] = useState(0);
-  const navigate = useNavigate();
+  const { id } = useParams()
+  /* const { user } = useContext(AuthContext); */
+  const user = useAuthStore((s) => s.user)
+  const [likes, setLikes] = useState(0)
+  const navigate = useNavigate()
+  const notify = useNotificationStore((s) => s.showNotification)
+  const removeBlog = useBlogStore((state) => state.removeBlog)
 
-  const blog = blogs.find((b) => b.id === id);
+  const blog = blogs.find((b) => b.id === id)
 
   useEffect(() => {
     const getLikes = () => {
-      const blog = blogs.find((b) => b.id === id);
+      const blog = blogs.find((b) => b.id === id)
       if (blog) {
-        setLikes(blog.likes);
+        setLikes(blog.likes)
       }
-    };
+    }
 
-    getLikes();
-  }, []);
+    getLikes()
+  }, [])
 
-  if (!blog) return null;
+  if (!blog) return null
 
   const likeBlog = async (id) => {
     if (user) {
-      await modify(id, { likes: 1 });
-      setLikes(likes + 1);
+      await modify(id, { likes: 1 })
+      setLikes(likes + 1)
+      notify(`Liked ${blog.title}`)
     }
-  };
+  }
 
-  const removeBlog = async () => {
+  const handleRemoveBlog = async () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       try {
-        await remove(blog.id);
-        setBlogs((blogs) => blogs.filter((b) => b.id !== blog.id));
-        navigate("/");
+        removeBlog(blog.id)
+        notify("Blog removed", "success")
+        //setBlogs((blogs) => blogs.filter((b) => b.id !== blog.id))
+        navigate("/")
       } catch (e) {
-        console.log("error removing blog", e);
+        console.log("error removing blog", e)
       }
     }
-  };
+  }
 
-  const canRemove = user && blog.user && blog.user.username === user.username;
+  const canRemove = user && blog.user && blog.user.username === user.username
 
   return (
     <Card sx={{ mb: 3, p: 2 }}>
@@ -93,14 +101,14 @@ const Blog = ({ blogs, setBlogs }) => {
             variant="outlined"
             color="error"
             size="small"
-            onClick={() => removeBlog(blog.id)}
+            onClick={() => handleRemoveBlog(blog.id)}
           >
             remove
           </Button>
         )}
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog

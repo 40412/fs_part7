@@ -1,11 +1,13 @@
-import { AppBar, Toolbar, Button, Typography, Box } from "@mui/material";
-import { useContext } from "react";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../context/authcontext";
-import LogoutButton from "./LogOutButton";
+import { AppBar, Toolbar, Button, Typography, Box } from "@mui/material"
+import { useContext } from "react"
+import { Link } from "react-router-dom"
+import { AuthContext } from "../context/authcontext"
+import LogoutButton from "./LogOutButton"
+import useAuthStore from "../stores/authStore"
 
 const Navigation = () => {
-  const { user } = useContext(AuthContext);
+  /* const { user } = useContext(AuthContext); */
+  const user = useAuthStore((s) => s.user)
 
   return (
     <AppBar position="static">
@@ -53,7 +55,7 @@ const Navigation = () => {
         {/* <Typography sx={{ marginRight: 2 }}>{user.name} logged in</Typography> */}
       </Toolbar>
     </AppBar>
-  );
-};
+  )
+}
 
-export default Navigation;
+export default Navigation

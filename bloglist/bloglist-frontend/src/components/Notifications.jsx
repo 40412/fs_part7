@@ -1,7 +1,19 @@
-import "../index.css";
+import "../index.css"
+import useNotificationStore from "../stores/notificationStore"
 
-export const Notification = ({ message }) => {
-  if (!message) return null;
+export const Notification = () => {
+  const notification = useNotificationStore((s) => s.notification)
 
-  return <div className={message.type}>{message.text}</div>;
-};
+  if (!notification) return null
+
+  const style = {
+    padding: 10,
+    border: "2px solid",
+    borderColor: notification.type === "error" ? "red" : "green",
+    marginBottom: 10,
+  }
+
+  if (!notification) return null
+
+  return <div style={style}>{notification.text}</div>
+}

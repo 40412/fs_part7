@@ -1,36 +1,42 @@
-import { useState, useContext } from "react";
-import loginService from "../services/login";
-import { AuthContext } from "../context/authcontext";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import { useState, useContext } from "react"
+import loginService from "../services/login"
+import { AuthContext } from "../context/authcontext"
+import { useNavigate } from "react-router-dom"
+import { Button } from "@mui/material"
+import useAuthStore from "../stores/authStore"
+import useNotificationStore from "../stores/notificationStore"
 
 export const LoginForm = ({ showNotification }) => {
-  const { login } = useContext(AuthContext);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  /* const { login } = useContext(AuthContext); */
+  const login = useAuthStore((s) => s.login)
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const navigate = useNavigate()
+  const notify = useNotificationStore((s) => s.showNotification)
 
   const handleLogin = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
     try {
       const user = await loginService({
         username,
         password,
-      });
+      })
 
-      login(user);
+      login(user)
 
-      showNotification("Successfully logged in", "success");
+      /* showNotification("Successfully logged in", "success") */
+      notify("Successfully logged in", "success")
 
-      setUsername("");
-      setPassword("");
-      navigate("/");
+      setUsername("")
+      setPassword("")
+      navigate("/")
     } catch (e) {
-      console.log(e);
-      showNotification("Wrong credentials", "error");
+      console.log(e)
+      /* showNotification("Wrong credentials", "error") */
+      notify("Wrong credentials", "error")
     }
-  };
+  }
 
   return (
     <div>
@@ -57,5 +63,5 @@ export const LoginForm = ({ showNotification }) => {
         </Button>
       </form>
     </div>
-  );
-};
+  )
+}

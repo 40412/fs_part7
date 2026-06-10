@@ -1,72 +1,65 @@
-import { useEffect, useContext, useState } from "react";
-import { LoginForm } from "./components/login";
-import { AuthContext } from "./context/authcontext";
-import { BlockList } from "./components/BlogList";
-import LogoutButton from "./components/LogOutButton";
-import BlogForm from "./components/BlogForm";
-import { Notification } from "./components/Notifications";
+import { useEffect, useContext, useState } from "react"
+import { LoginForm } from "./components/login"
+import { AuthContext } from "./context/authcontext"
+import { BlockList } from "./components/BlogList"
+import LogoutButton from "./components/LogOutButton"
+import BlogForm from "./components/BlogForm"
+import { Notification } from "./components/Notifications"
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Link,
   useNavigate,
-} from "react-router-dom";
-import Navigation from "./components/Navigation";
-import Blog from "./components/BlogDetail";
-import ErrorBoundary from "./components/ErrorBoundary";
-import { NotFound } from "./components/NotFound";
+} from "react-router-dom"
+import Navigation from "./components/Navigation"
+import Blog from "./components/BlogDetail"
+import ErrorBoundary from "./components/ErrorBoundary"
+import { NotFound } from "./components/NotFound"
+import useAuthStore from "./stores/authStore"
+import useBlogStore from "./stores/blogStore"
 
 const App = () => {
-  const { user, login } = useContext(AuthContext);
-  const [blogs, setBlogs] = useState([]);
-  const [notification, setNotification] = useState(null);
+  const loadUserFromStorage = useAuthStore((s) => s.loadUserFromStorage)
+  const blogs = useBlogStore((state) => state.blogs)
+  const fetchBlogs = useBlogStore((state) => state.fetchBlogs)
+
+  /* useEffect(() => {
+    const savedUser = window.localStorage.getItem("loggedUser")
+    if (savedUser) {
+      const parsed = JSON.parse(savedUser)
+      login(parsed)
+    }
+  }, []) */
 
   useEffect(() => {
-    const savedUser = window.localStorage.getItem("loggedUser");
-    if (savedUser) {
-      const parsed = JSON.parse(savedUser);
-      login(parsed);
-    }
-  }, []);
+    loadUserFromStorage()
+  }, [loadUserFromStorage])
 
-  const showNotification = (text, type = "success") => {
-    setNotification({ text, type });
-    setTimeout(() => setNotification(null), 4000);
-  };
+  useEffect(() => {
+    fetchBlogs()
+  }, [fetchBlogs])
+
+  /* const showNotification = (text, type = "success") => {
+    setNotification({ text, type })
+    setTimeout(() => setNotification(null), 5000)
+  } */
 
   return (
     <Router>
       <Navigation />
-      <Notification message={notification} />
+      <Notification />
       <ErrorBoundary>
         <Routes>
-          <Route
-            path="/login"
-            element={<LoginForm showNotification={showNotification} />}
-          />
-          <Route
-            path="/"
-            element={<BlockList blogs={blogs} setBlogs={setBlogs} />}
-          />
-          <Route
-            path="/blogs/:id"
-            element={<Blog blogs={blogs} setBlogs={setBlogs} />}
-          />
-          <Route
-            path="/new"
-            element={
-              <BlogForm
-                setblogs={setBlogs}
-                showNotification={showNotification}
-              />
-            }
-          ></Route>
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/" element={<BlockList blogs={blogs} />} />
+          <Route path="/blogs/:id" element={<Blog blogs={blogs} />} />
+          <Route path="/new" element={<BlogForm />}></Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </ErrorBoundary>
     </Router>
-  );
-};
+  )
+}
 
-export default App;
+export default App
