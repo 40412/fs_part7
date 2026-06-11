@@ -9,6 +9,10 @@ const requestLogger = (req, res, next) => {
   if (req.method === "PUT") {
     logger.info("PUT payload", req.body);
   }
+  if (req.method === "GET") {
+    logger.info("GET");
+    logger.info(req.url);
+  }
   next();
 };
 

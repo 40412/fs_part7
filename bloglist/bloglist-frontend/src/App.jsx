@@ -18,6 +18,8 @@ import ErrorBoundary from "./components/ErrorBoundary"
 import { NotFound } from "./components/NotFound"
 import useAuthStore from "./stores/authStore"
 import useBlogStore from "./stores/blogStore"
+import { UserList } from "./components/UserList"
+import { UserDetail } from "./components/UserDetail"
 
 const App = () => {
   const loadUserFromStorage = useAuthStore((s) => s.loadUserFromStorage)
@@ -55,6 +57,8 @@ const App = () => {
           <Route path="/" element={<BlockList blogs={blogs} />} />
           <Route path="/blogs/:id" element={<Blog blogs={blogs} />} />
           <Route path="/new" element={<BlogForm />}></Route>
+          <Route path="/users" element={<UserList />} />
+          <Route path="/users/:id" element={<UserDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </ErrorBoundary>

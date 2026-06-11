@@ -24,6 +24,16 @@ const Navigation = () => {
           Blogs
         </Button>
 
+        <Button
+          style={{ margin: 10 }}
+          variant="contained"
+          component={Link}
+          to="/users"
+          sx={{ textTransform: "none" }}
+        >
+          Users
+        </Button>
+
         {user && (
           <Button
             style={{ margin: 10 }}
