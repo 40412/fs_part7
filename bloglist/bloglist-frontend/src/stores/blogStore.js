@@ -21,6 +21,13 @@ const useBlogStore = create((set) => ({
       blogs: state.blogs.filter((b) => b.id !== id),
     }))
   },
+
+  updateBlog: (updatedBlog) =>
+    set((state) => ({
+      blogs: state.blogs.map((b) =>
+        b.id === updatedBlog.id ? updatedBlog : b,
+      ),
+    })),
 }))
 
 export default useBlogStore

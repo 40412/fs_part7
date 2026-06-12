@@ -13,6 +13,7 @@ import {
 import useAuthStore from "../stores/authStore"
 import useNotificationStore from "../stores/notificationStore"
 import useBlogStore from "../stores/blogStore"
+import { CommentForm } from "./CommentForm"
 
 const Blog = ({ blogs, setBlogs }) => {
   const { id } = useParams()
@@ -97,8 +98,9 @@ const Blog = ({ blogs, setBlogs }) => {
         </Typography>
 
         <h2>Comments</h2>
+        <CommentForm blogId={blog.id} />
         {blog.comments.map((c, i) => (
-          <p>{c}</p>
+          <p key={i}>{c}</p>
         ))}
 
         {canRemove && (
