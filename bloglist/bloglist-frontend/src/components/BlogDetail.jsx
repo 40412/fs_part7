@@ -96,6 +96,11 @@ const Blog = ({ blogs, setBlogs }) => {
           added by {blog.user?.name}
         </Typography>
 
+        <h2>Comments</h2>
+        {blog.comments.map((c, i) => (
+          <p>{c}</p>
+        ))}
+
         {canRemove && (
           <Button
             variant="outlined"
