@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { addComment } from "../services/blogs"
 import useBlogStore from "../stores/blogStore"
+import { Box, Button, TextField } from "@mui/material"
 
 export const CommentForm = ({ blogId }) => {
   const [comment, setComment] = useState("")
@@ -14,9 +15,22 @@ export const CommentForm = ({ blogId }) => {
   }
 
   return (
-    <form onSubmit={handleAddComment}>
-      <input value={comment} onChange={(e) => setComment(e.target.value)} />
-      <button type="submit">add comment</button>
-    </form>
+    <Box
+      component="form"
+      onSubmit={handleAddComment}
+      sx={{ display: "flex", gap: 2, mt: 2 }}
+    >
+      <TextField
+        label="Add a comment"
+        variant="outlined"
+        size="small"
+        fullWidth
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+      />
+      <Button variant="contained" type="submit">
+        Add
+      </Button>
+    </Box>
   )
 }

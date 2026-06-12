@@ -9,6 +9,10 @@ import {
   Button,
   Stack,
   Link,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material"
 import useAuthStore from "../stores/authStore"
 import useNotificationStore from "../stores/notificationStore"
@@ -97,11 +101,21 @@ const Blog = ({ blogs, setBlogs }) => {
           added by {blog.user?.name}
         </Typography>
 
-        <h2>Comments</h2>
-        <CommentForm blogId={blog.id} />
-        {blog.comments.map((c, i) => (
-          <p key={i}>{c}</p>
-        ))}
+        <Paper elevation={1} sx={{ p: 2, mt: 3 }}>
+          <Typography variant="h6" sx={{ mb: 1 }}>
+            Comments
+          </Typography>
+
+          <CommentForm blogId={blog.id} />
+
+          <List>
+            {blog.comments.map((c, i) => (
+              <ListItem key={i} divider sx={{ py: 1 }}>
+                <ListItemText primary={c} />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
 
         {canRemove && (
           <Button
